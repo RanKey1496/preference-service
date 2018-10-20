@@ -5,8 +5,8 @@ import { injectable } from 'inversify';
 @injectable()
 export class PreferenceRepository extends GenericRepositoryImp<PreferenceModel> {
 
-    public async findByUserId(id: number): Promise<PreferenceModel[]> {
-        return await Preference.find({user_id: id});
+    public async findByEmail(email: string): Promise<PreferenceModel[]> {
+        return await Preference.find({ email });
     }
 
     public async findByProductId(id: number): Promise<PreferenceModel[]> {

@@ -2,9 +2,11 @@ const Types = {
 
     Controller: Symbol('Controller'),
 
-    PreferenceController: Symbol('PreferenceController'),
     PreferenceService: Symbol('PreferenceService'),
-    PreferenceRepository: Symbol('PreferenceRepository')
+    AuthService: Symbol('AuthService'),
+
+    PreferenceRepository: Symbol('PreferenceRepository'),
+    AuthRepository: Symbol('AuthRepository')
 
 };
 
