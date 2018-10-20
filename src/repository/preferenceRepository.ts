@@ -9,6 +9,10 @@ export class PreferenceRepository extends GenericRepositoryImp<PreferenceModel>Â
         return await Preference.findOne({ email });
     }
 
+    public async findAllByEmail(email: string): Promise<PreferenceModel> {
+        return await Preference.findOne({ email }, 'products -_id');
+    }
+
     public async update(preference: PreferenceModel): Promise<boolean> {
         const result = await preference.save();
         return !!result;
