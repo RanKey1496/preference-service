@@ -13,7 +13,7 @@ export class PreferenceController implements RegistrableController {
     private preferenceService: PreferenceService;
 
     public register(app: Application): void {
-        app.route('/preferences/user/:id')
+        app.route('/preferences/user')
             .get(authenticate,
                 async (req: Request, res: Response, next: NextFunction) => {
                 try {
@@ -29,10 +29,10 @@ export class PreferenceController implements RegistrableController {
                 async (req: Request, res: Response, next: NextFunction) => {
                 try {
                     const email = req.body.email;
-                    const preference = req.body.preference;
+                    const productId = req.body.productId;
                     const like = req.body.like;
-                    const result = await this.preferenceService.create(email, preference, like);
-                    return dataResponse(res, result);
+                    await this.preferenceService.create(email, productId, like);
+                    return dataResponse(res, 'Saved successfully');
                 } catch (error) {
                     return next(error);
                 }
