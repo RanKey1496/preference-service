@@ -4,6 +4,7 @@ const Types = {
 
     PreferenceService: Symbol('PreferenceService'),
     AuthService: Symbol('AuthService'),
+    ProductService: Symbol('ProductService'),
 
     PreferenceRepository: Symbol('PreferenceRepository'),
     AuthRepository: Symbol('AuthRepository')

@@ -4,8 +4,8 @@ import Types from './types';
 import { PreferenceController } from '../controller/preferenceController';
 import { PreferenceService, PreferenceServiceImpl } from '../service/preferenceService';
 import { PreferenceRepository } from '../repository/preferenceRepository';
-// import { AuthRepository } from '../repository/authRepository';
-// import { AuthService, AuthServiceImp } from '../service/authService';
+import { ProductService } from '../service/productService';
+import { ProductServiceImp } from '../service/productService';
 
 const container: Container = new Container();
 
@@ -17,5 +17,6 @@ container.bind<PreferenceRepository>(Types.PreferenceRepository).to(PreferenceRe
 
 // Services
 container.bind<PreferenceService>(Types.PreferenceService).to(PreferenceServiceImpl).inSingletonScope();
+container.bind<ProductService>(Types.ProductService).to(ProductServiceImp).inSingletonScope();
 
 export { container };

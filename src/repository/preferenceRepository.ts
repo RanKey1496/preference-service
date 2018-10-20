@@ -9,8 +9,22 @@ export class PreferenceRepository extends GenericRepositoryImp<PreferenceModel>Â
         return await Preference.findOne({ email });
     }
 
-    public async findAllByEmail(email: string): Promise<PreferenceModel> {
-        return await Preference.findOne({ email }, 'products -_id');
+    public async findAllByEmail(email: string): Promise<Array<any>> {
+        const aggregatorOpts = [
+            {
+                $match: { email: { $lte: email } }
+            },
+            {
+                $unwind: '$products'
+            },
+            {
+                $group: {
+                    _id: '$products.id',
+                    count: { $sum: 1 }
+                }
+            }
+        ];
+        return await Preference.aggregate(aggregatorOpts).exec();
     }
 
     public async update(preference: PreferenceModel): Promise<boolean> {
