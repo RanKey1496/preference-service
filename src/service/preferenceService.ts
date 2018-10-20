@@ -7,6 +7,7 @@ export interface PreferenceService {
     getByUser(email: string): Promise<Array<any>>;
     create(email: string, product: any, like: boolean): Promise<boolean>;
     getByUserVoted(email: string): Promise<Array<any>>;
+    getByCorridorId(email: string, corridorId: number, productId: number): Promise<Array<any>>;
 }
 
 @injectable()
@@ -27,6 +28,16 @@ export class PreferenceServiceImpl implements PreferenceService {
     public async getByUserVoted(email: string): Promise<Array<any>> {
         const result = await this.preferenceRepository.findAllByEmail(email);
         if (result !== undefined && result !== null && result.products !== undefined && result.products) {
+            return result.products;
+        } else {
+            return [];
+        }
+    }
+
+    public async getByCorridorId(email: string, corridorId: number, productId: number): Promise<Array<any>> {
+        const result = await this.preferenceRepository.findByCorridorIdEmail(email, corridorId, productId);
+        if (result !== undefined && result !== null && result.products !== undefined) {
+            console.log(result);
             return result.products;
         } else {
             return [];

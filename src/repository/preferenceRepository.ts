@@ -44,4 +44,8 @@ export class PreferenceRepository extends GenericRepositoryImp<PreferenceModel>Â
         return !!result;
     }
 
+    public async findByCorridorIdEmail(email: string, corridorId: number, productId: number): Promise<any> {
+        return await Preference.find({ email, corridorId, productId: { '$nin': [ productId ] } });
+    }
+
 }

@@ -28,6 +28,19 @@ export class PreferenceController implements RegistrableController {
                 }
             });
 
+        app.route('/preferences/user/:corridorId/:productId')
+            .get(authenticate,
+                async (req: Request, res: Response, next: NextFunction) => {
+                try {
+                    const corridorId = req.params.corridorId;
+                    const productId = req.params.productId;
+                    const result = await this.preferenceService.getByCorridorId(req.body.email, corridorId, productId);
+                    return dataResponse(res, result);
+                } catch (error) {
+                    return next(error);
+                }
+            });
+
         app.route('/preferences/user/voted')
             .get(authenticate,
                 async (req: Request, res: Response, next: NextFunction) => {
