@@ -4,7 +4,7 @@ import Types from '../config/types';
 import { PreferenceRepository } from '../repository/preferenceRepository';
 
 export interface PreferenceService {
-    getByUser(email: string): Promise<PreferenceModel>;
+    getByUser(email: string): Promise<PreferenceModel[]>;
     create(email: string, productId: number, like: boolean): Promise<boolean>;
 }
 
@@ -14,8 +14,13 @@ export class PreferenceServiceImpl implements PreferenceService {
     @inject(Types.PreferenceRepository)
     private preferenceRepository: PreferenceRepository;
 
-    public async getByUser(email: string): Promise<PreferenceModel> {
-        return await this.preferenceRepository.findByEmail(email);
+    public async getByUser(email: string): Promise<Array<any>> {
+        const result = await this.preferenceRepository.findAllByEmail(email);
+        if (result !== undefined && result !== null && result.products !== undefined && result.products) {
+            return result.products;
+        } else {
+            return [];
+        }
     }
 
     public async create(email: string, productId: number, like: boolean): Promise<boolean> {
