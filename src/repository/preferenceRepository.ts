@@ -9,17 +9,24 @@ export class PreferenceRepository extends GenericRepositoryImp<PreferenceModel>Â
         return await Preference.findOne({ email });
     }
 
-    public async findAllByEmail(email: string): Promise<Array<any>> {
+    public async findAllByEmail(email: string): Promise<PreferenceModel> {
+        return await Preference.findOne({ email }, 'products products.id products.like -_id');
+    }
+
+    public async findAllByEmailGroupedByLikes(email: string): Promise<Array<any>> {
         const aggregatorOpts = [
             {
-                $match: { email: { $lte: email } }
+                $match: { email }
             },
             {
                 $unwind: '$products'
             },
             {
+                $match: { 'products.like': 'true' }
+            },
+            {
                 $group: {
-                    _id: '$products.id',
+                    _id: '$products.corridorId',
                     count: { $sum: 1 }
                 }
             }

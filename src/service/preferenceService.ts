@@ -6,6 +6,7 @@ import { PreferenceRepository } from '../repository/preferenceRepository';
 export interface PreferenceService {
     getByUser(email: string): Promise<Array<any>>;
     create(email: string, product: any, like: boolean): Promise<boolean>;
+    getByUserVoted(email: string): Promise<Array<any>>;
 }
 
 @injectable()
@@ -15,9 +16,18 @@ export class PreferenceServiceImpl implements PreferenceService {
     private preferenceRepository: PreferenceRepository;
 
     public async getByUser(email: string): Promise<Array<any>> {
-        const result = await this.preferenceRepository.findAllByEmail(email);
+        const result = await this.preferenceRepository.findAllByEmailGroupedByLikes(email);
         if (result !== undefined && result !== null) {
             return result;
+        } else {
+            return [];
+        }
+    }
+
+    public async getByUserVoted(email: string): Promise<Array<any>> {
+        const result = await this.preferenceRepository.findAllByEmail(email);
+        if (result !== undefined && result !== null && result.products !== undefined && result.products) {
+            return result.products;
         } else {
             return [];
         }
