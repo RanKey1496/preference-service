@@ -20,7 +20,6 @@ export class PreferenceServiceImpl implements PreferenceService {
 
     public async create(email: string, productId: number, like: boolean): Promise<boolean> {
         const user = await this.preferenceRepository.findByEmail(email);
-        console.log(user);
         if (user) {
             const liked = user.products.find(product => product.id === productId);
             if (liked) {
