@@ -30,10 +30,10 @@
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
     "reflect-metadata": "^0.1.12",
+    "request": "^2.88.0",
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.2.19",
     "@types/body-parser": "^1.17.0",
     "@types/chai": "^4.1.6",
     "@types/compression": "0.0.36",
@@ -44,8 +44,10 @@
     "@types/helmet": "0.0.42",
     "@types/http-status": "^0.2.30",
     "@types/jest": "^23.3.5",
+    "@types/mongoose": "^5.2.19",
     "@types/morgan": "^1.7.35",
     "@types/node": "^10.11.6",
+    "@types/request": "^2.47.1",
     "chai": "^4.2.0",
     "concurrently": "^4.0.1",
     "jest": "^23.6.0",

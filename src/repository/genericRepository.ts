@@ -9,8 +9,8 @@ export interface Repository<T> {
     findById(id: number): Promise<T>;
     findManyById(ids: number[]): Promise<T[]>;
     findByQuery(query?: Query<T>): Promise<T[]>;
-    update(id: number, item: T): Promise<boolean>;
-    save(data: T): Promise<T>;
+    update(item: T): Promise<boolean>;
+    save(data: T): Promise<boolean>;
     delete(id: number): Promise<boolean>;
 }
 
@@ -28,10 +28,10 @@ export abstract class GenericRepositoryImp<TEntity> implements Repository<TEntit
     findByQuery(query?: Query<TEntity>): Promise<TEntity[]> {
         throw new Error('Method not implemented.');
     }
-    update(id: number, item: TEntity): Promise<boolean> {
+    update(item: TEntity): Promise<boolean> {
         throw new Error('Method not implemented.');
     }
-    save(data: TEntity): Promise<TEntity> {
+    save(data: TEntity): Promise<boolean> {
         throw new Error('Method not implemented.');
     }
     delete(id: number): Promise<boolean> {

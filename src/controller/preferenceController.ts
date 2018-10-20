@@ -1,10 +1,10 @@
 import { RegistrableController } from './RegistrableController';
-import { Application, Request, Response } from 'express';
+import { Application, Request, Response, NextFunction } from 'express';
 import { injectable, inject } from 'inversify';
-import { NextFunction } from 'connect';
 import Types from '../config/types';
 import { PreferenceService } from '../service/preferenceService';
 import { dataResponse } from '../utils/response';
+import { authenticate } from '../service/authService';
 
 @injectable()
 export class PreferenceController implements RegistrableController {
@@ -12,23 +12,12 @@ export class PreferenceController implements RegistrableController {
     @inject(Types.PreferenceService)
     private preferenceService: PreferenceService;
 
-    register(app: Application): void {
-        app.route('/preferences/user/:id')
-            .get(async (req: Request, res: Response, next: NextFunction) => {
+    public register(app: Application): void {
+        app.route('/preferences/user')
+            .get(authenticate,
+                async (req: Request, res: Response, next: NextFunction) => {
                 try {
-                    const id = req.params.id;
-                    const result = await this.preferenceService.getByUserId(id);
-                    return dataResponse(res, result);
-                } catch (error) {
-                    return next(error);
-                }
-            });
-
-        app.route('/preferences/product/:id')
-            .get(async (req: Request, res: Response, next: NextFunction) => {
-                try {
-                    const id = req.params.id;
-                    const result = await this.preferenceService.getByProductId(id);
+                    const result = await this.preferenceService.getByUser(req.body.email);
                     return dataResponse(res, result);
                 } catch (error) {
                     return next(error);
@@ -36,11 +25,14 @@ export class PreferenceController implements RegistrableController {
             });
 
         app.route('/preferences')
-            .get(async (req: Request, res: Response, next: NextFunction) => {
+            .post(authenticate,
+                async (req: Request, res: Response, next: NextFunction) => {
                 try {
-                    const preference = req.body.preference;
-                    const result = await this.preferenceService.create(preference);
-                    return dataResponse(res, result);
+                    const email = req.body.email;
+                    const productId = req.body.productId;
+                    const like = req.body.like;
+                    await this.preferenceService.create(email, productId, like);
+                    return dataResponse(res, 'Saved successfully');
                 } catch (error) {
                     return next(error);
                 }
