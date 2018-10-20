@@ -5,6 +5,7 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
     try {
         const response = JSON.parse(await requestAuth(req.get('Authorization')));
         req.body.email = response.email;
+        req.body.token = req.get('Authorization');
         return next();
     } catch (error) {
         return next(error);

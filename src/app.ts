@@ -37,7 +37,7 @@ export default class App {
         controllers.forEach(controller => controller.register(app));
 
         app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-            logger.error(err.stack);
+            console.error(err.stack);
             if (err instanceof NotFound) {
                 return notFoundResponse(res, err.message);
             }

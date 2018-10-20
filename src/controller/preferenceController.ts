@@ -5,12 +5,16 @@ import Types from '../config/types';
 import { PreferenceService } from '../service/preferenceService';
 import { dataResponse } from '../utils/response';
 import { authenticate } from '../service/authService';
+import { ProductService } from '../service/productService';
 
 @injectable()
 export class PreferenceController implements RegistrableController {
 
     @inject(Types.PreferenceService)
     private preferenceService: PreferenceService;
+
+    @inject(Types.ProductService)
+    private productService: ProductService;
 
     public register(app: Application): void {
         app.route('/preferences/user')
@@ -24,6 +28,17 @@ export class PreferenceController implements RegistrableController {
                 }
             });
 
+        app.route('/preferences/user/voted')
+            .get(authenticate,
+                async (req: Request, res: Response, next: NextFunction) => {
+                try {
+                    const result = await this.preferenceService.getByUserVoted(req.body.email);
+                    return dataResponse(res, result);
+                } catch (error) {
+                    return next(error);
+                }
+            });
+
         app.route('/preferences')
             .post(authenticate,
                 async (req: Request, res: Response, next: NextFunction) => {
@@ -31,7 +46,23 @@ export class PreferenceController implements RegistrableController {
                     const email = req.body.email;
                     const productId = req.body.productId;
                     const like = req.body.like;
-                    await this.preferenceService.create(email, productId, like);
+                    const product = await this.productService.getProduct(req.body.token, productId);
+                    await this.preferenceService.create(email, product, like);
+                    return dataResponse(res, 'Saved successfully');
+                } catch (error) {
+                    return next(error);
+                }
+            });
+
+        app.route('/preferences')
+            .post(authenticate,
+                async (req: Request, res: Response, next: NextFunction) => {
+                try {
+                    const email = req.body.email;
+                    const productId = req.body.productId;
+                    const like = req.body.like;
+                    const product = await this.productService.getProduct(req.body.token, productId);
+                    await this.preferenceService.create(email, product, like);
                     return dataResponse(res, 'Saved successfully');
                 } catch (error) {
                     return next(error);
