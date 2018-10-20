@@ -5,16 +5,22 @@ import { injectable } from 'inversify';
 @injectable()
 export class PreferenceRepository extends GenericRepositoryImp<PreferenceModel> {
 
-    public async findByUserId(id: number): Promise<PreferenceModel[]> {
-        return await Preference.find({user_id: id});
+    public async findByEmail(email: string): Promise<PreferenceModel> {
+        return await Preference.findOne({ email });
     }
 
-    public async findByProductId(id: number): Promise<PreferenceModel[]> {
-        return await Preference.find({product_id: id});
+    public async findAllByEmail(email: string): Promise<PreferenceModel> {
+        return await Preference.findOne({ email }, 'products -_id');
     }
 
-    public async save(preference: PreferenceModel): Promise<PreferenceModel> {
-        return await Preference.create(preference);
+    public async update(preference: PreferenceModel): Promise<boolean> {
+        const result = await preference.save();
+        return !!result;
+    }
+
+    public async save(preference: PreferenceModel): Promise<boolean> {
+        const result = await Preference.create(preference);
+        return !!result;
     }
 
 }

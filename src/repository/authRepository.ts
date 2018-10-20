@@ -1,12 +1,15 @@
-import { injectable } from 'inversify';
+import { post } from 'request';
+import { AUTH_URL } from '../utils/secrets';
+import { Unauthorize } from '../utils/exceptions';
 
-export interface AuthRepository {
-
-}
-
-@injectable()
-export class AuthRepositoryImp implements AuthRepository {
-
-
-
+export function requestAuth(token: string): any {
+    return new Promise((resolve, reject) => {
+        post(AUTH_URL, { headers: { 'Authorization': token }}, (error, response, body) => {
+            if (!error && response.statusCode === 200) {
+                resolve(body);
+            } else {
+                reject(new Unauthorize('Invalid token'));
+            }
+        });
+    });
 }

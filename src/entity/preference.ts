@@ -1,22 +1,18 @@
 import { Document, Schema, Model, model } from 'mongoose';
 
 export interface IPreference {
-    productId: number;
-    userId: number;
-    liked: boolean;
+    email: string;
+    products: Array<any>;
 }
 
 export interface PreferenceModel extends IPreference, Document { }
 
 export const PreferenceSchema: Schema = new Schema({
-    user_id: {
-        type: Number, required: true
+    email: {
+        type: String, required: true
     },
-    product_id: {
-        type: Number, required: true
-    },
-    liked: {
-        type: Boolean, required: true
+    products: {
+        type: Array
     }
 }, { timestamps: true, versionKey: false });
 
